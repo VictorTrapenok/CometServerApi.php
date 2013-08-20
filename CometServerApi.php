@@ -223,35 +223,5 @@ class CometServerApi
 }
 
 
-
-
-/**
- * 
- * mkdir -p build/Debug/GNU-Linux-x86
-rm -f build/Debug/GNU-Linux-x86/base_event.o.d
-c++ -pthread   -c -g -MMD -MP -MF build/Debug/GNU-Linux-x86/base_event.o.d -o build/Debug/GNU-Linux-x86/base_event.o base_event.cpp
-mkdir -p build/Debug/GNU-Linux-x86
-rm -f build/Debug/GNU-Linux-x86/Server_connection.o.d
-c++ -pthread   -c -g -MMD -MP -MF build/Debug/GNU-Linux-x86/Server_connection.o.d -o build/Debug/GNU-Linux-x86/Server_connection.o Server_connection.cpp
-mkdir -p build/Debug/GNU-Linux-x86
-rm -f build/Debug/GNU-Linux-x86/mystring.o.d
-c++ -pthread   -c -g -MMD -MP -MF build/Debug/GNU-Linux-x86/mystring.o.d -o build/Debug/GNU-Linux-x86/mystring.o mystring.cpp
-mkdir -p build/Debug/GNU-Linux-x86
-rm -f build/Debug/GNU-Linux-x86/user_index.o.d
-c++ -pthread   -c -g -MMD -MP -MF build/Debug/GNU-Linux-x86/user_index.o.d -o build/Debug/GNU-Linux-x86/user_index.o user_index.cpp
-mkdir -p build/Debug/GNU-Linux-x86
-rm -f build/Debug/GNU-Linux-x86/main.o.d
-c++ -pthread   -c -g -MMD -MP -MF build/Debug/GNU-Linux-x86/main.o.d -o build/Debug/GNU-Linux-x86/main.o main.cpp
-mkdir -p build/Debug/GNU-Linux-x86
-rm -f build/Debug/GNU-Linux-x86/connection.o.d
-c++ -pthread   -c -g -MMD -MP -MF build/Debug/GNU-Linux-x86/connection.o.d -o build/Debug/GNU-Linux-x86/connection.o connection.cpp
-mkdir -p build/Debug/GNU-Linux-x86
-rm -f build/Debug/GNU-Linux-x86/Client_connection.o.d
-c++ -pthread   -c -g -MMD -MP -MF build/Debug/GNU-Linux-x86/Client_connection.o.d -o build/Debug/GNU-Linux-x86/Client_connection.o Client_connection.cpp
-mkdir -p build/Debug/GNU-Linux-x86
-rm -f build/Debug/GNU-Linux-x86/tcpServer.o.d
-c++ -pthread   -c -g -MMD -MP -MF build/Debug/GNU-Linux-x86/tcpServer.o.d -o build/Debug/GNU-Linux-x86/tcpServer.o tcpServer.cpp
-mkdir -p dist/Debug/GNU-Linux-x86
-c++ -pthread    -o dist/Debug/GNU-Linux-x86/mirror_fantasies_server build/Debug/GNU-Linux-x86/base_event.o build/Debug/GNU-Linux-x86/Server_connection.o build/Debug/GNU-Linux-x86/mystring.o build/Debug/GNU-Linux-x86/user_index.o build/Debug/GNU-Linux-x86/main.o build/Debug/GNU-Linux-x86/connection.o build/Debug/GNU-Linux-x86/Client_connection.o build/Debug/GNU-Linux-x86/tcpServer.o
- */
+ 
 ?>
