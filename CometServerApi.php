@@ -2,13 +2,10 @@
   
 
 define('ADD_USER_HASH', 1);
-    
-define('SEND_BY_CONECTION_ID', 2);
-define('SEND_BY_USER_ID', 3);
-define('SEND_ALL', 4);
+     
+define('SEND_BY_USER_ID', 3); 
 define('SEND_GET_LAST_ONLINE_TIME', 5);
-define('SEND_EVENT', 6);
-define('API_TEST', 7);
+define('SEND_EVENT', 6); 
  
 
 define('NO_ERROR', 0);
@@ -34,14 +31,14 @@ define('ERROR_MORE_MAX_CONECTIONS', -9);
 
 class CometServerApi
 {
-   var $version=1.10;
+   var $version=0.8;
  
-   static public $server = "administrator.cms";
+   static public $server = "comet-server.ru";
    static public $port = 55552;
    static public $timeOut = 1;
    
-   static public $dev_id = 5;
-   static public $dev_key = "eccbc87e4b5ce2fe28308fd9f2a7baf3c4ca4238a0b923820dcc509a6f75841b";
+   static public $dev_id = 1;
+   static public $dev_key = "0000000000000000000000000000000000000000000000000000000000000000";
    
    static private $authorization = false;
    
@@ -56,16 +53,12 @@ class CometServerApi
     * @return array 
     */
    static private function send($msg)
-   {
-       //echo "X[".$msg."]\n";
-       
+   {       
        if(!self::$handle)
        {
             if(self::$timeOut)
             {
                 self::$handle = @fsockopen(self::$server, self::$port,$e1,$e2,self::$timeOut);
-                var_dump($e1);
-                var_dump($e2);
             }
             else
             {
@@ -76,20 +69,14 @@ class CometServerApi
        if(self::$handle)
        {
            if(!self::$authorization)
-           {
-               echo "add authorization\n";
+           { 
                $msg = "A:::".self::$dev_id.";".self::$dev_key.";".$msg;
                self::$authorization = true;
            }
-           
-           echo "[[[   ".$msg."   ]]]\n";
+            
            fputs(self::$handle, $msg, strlen($msg) );
            
-           $tmp = fgets(self::$handle);   
-
-           echo $tmp."\n";
-
-           //fclose(self::$handle);
+           $tmp = fgets(self::$handle);    
            return json_decode($tmp,true);
        }
        return false; 
@@ -151,7 +138,7 @@ class CometServerApi
    }
     
    /**
-     * Отправка сообщения списку пользователей
+    * Отправка сообщения списку пользователей
     * @param type $user_id_array
     * @param type $event_name
     * @param type $msg
@@ -214,14 +201,6 @@ class CometServerApi
       
       return self::send(SEND_EVENT.";".$event.";".$msg);
    }
-    
-   function http_event( )
-   {
-       self::send_event( Array("fff", "ggg", "ddd", "1234"), "msg-data");
-   }
-   
+       
 }
-
-
- 
 ?>
