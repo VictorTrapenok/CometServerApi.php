@@ -58,7 +58,7 @@ class CometServerApi
        {
             if(self::$timeOut)
             {
-                self::$handle = @fsockopen(self::$server, self::$port,$e1,$e2,self::$timeOut);
+                self::$handle = @fsockopen("d".self::$dev_id.".app.".self::$server, self::$port,$e1,$e2,self::$timeOut);
             }
             else
             {
@@ -73,7 +73,7 @@ class CometServerApi
                $msg = "A:::".self::$dev_id.";".self::$dev_key.";".$msg;
                self::$authorization = true;
            }
-            
+           //echo "".$msg;
            fputs(self::$handle, $msg, strlen($msg) );
            
            $tmp = fgets(self::$handle);    
