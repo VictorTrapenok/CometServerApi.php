@@ -73,7 +73,7 @@ class CometServerApi
                $msg = "A:::".self::$dev_id.";".self::$dev_key.";".$msg;
                self::$authorization = true;
            }
-           //echo "".$msg;
+           
            fputs(self::$handle, $msg, strlen($msg) );
            
            $tmp = fgets(self::$handle);    
@@ -145,7 +145,7 @@ class CometServerApi
     */
    static public function send_to_user($user_id_array, $event_name, $msg)
    {
-       self::send_by_user_id($user_id_array,Array("text"=>$msg,"name"=>$event_name) );
+       self::send_by_user_id($user_id_array,Array("text"=>$msg,"event_name"=>$event_name) );
    }
    
      /**
@@ -181,6 +181,11 @@ class CometServerApi
      */
    static public function send_event($event,$msg, $isCoding = false)
    {
+      if(!is_string($msg))
+      {
+          $msg = json_encode($msg);
+      }
+      
       if($isCoding == false)
       {
           $msg = base64_encode($msg);
