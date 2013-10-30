@@ -41,7 +41,9 @@ define('ERROR_MORE_MAX_CONECTIONS', -9);
 */
 class CometServerApi
 {
-   var $version=1.12;
+   static $version=1.12;
+   static $major_version=1;
+   static $minor_version=32;
 
    protected $server = "comet-server.ru";
    protected $port = 808;
@@ -133,11 +135,11 @@ class CometServerApi
        {
            if(!$this->authorization)
            {
-               $msg = "A:::".$this->dev_id.";".$this->dev_key.";".$msg;
+               $msg = "A:::".$this->dev_id.";".self::$major_version.";".self::$minor_version.";".$this->dev_key.";".$msg;
                $this->authorization = true;
            }
 
-
+	   // echo  $msg;
            if( @fputs($this->handle, $msg, strlen($msg) ) === false)
            {
                $this->handle = false;
@@ -145,7 +147,7 @@ class CometServerApi
            }
 
            $tmp = fgets($this->handle);
-           //echo  "[".$tmp."]\n" ;
+           // echo  "[".$tmp."]\n" ;
            return json_decode($tmp,true);
        }
        return false;
