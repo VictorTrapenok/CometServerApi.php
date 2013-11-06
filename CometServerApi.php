@@ -41,9 +41,9 @@ define('ERROR_MORE_MAX_CONECTIONS', -9);
 */
 class CometServerApi
 {
-   static $version=1.12;
+   static $version=1.5;
    static $major_version=1;
-   static $minor_version=32;
+   static $minor_version=5;
 
    protected $server = "comet-server.ru";
    protected $port = 808;
@@ -163,17 +163,16 @@ class CometServerApi
       return $this->send(self::$ADD_USER_HASH.";".$user_id.";".session_id()."");
    }
 
-    /**
-     * Отправка сообщения списку пользователей
-     * @param array $user_id_array Масив с идентификаторами получателей
-     * @param array $msg Структура данных которая будет отправлена, должна содержать поле name с именем адресата (chat, и др.)
-     * @return array
-     *
-     * Перед отправкой данные конвертируются в json а затем кодируются в base64
-     * Структура данных которая будет отправлена принимающий js ожидает увидеть поле name - имя события
-     */
-   public function send_by_user_id($user_id_array,$msg)
+   /**
+    * Отправка сообщения списку пользователей
+    * @param type $user_id_array
+    * @param type $event_name
+    * @param type $msg
+    */
+   public function send_to_user($user_id_array, $event_name, $msg)
    {
+        $msg = Array("data"=>$msg,"event_name"=>$event_name);
+       
         if(!is_array($user_id_array))
         {
             if( (int)$user_id_array > 0)
@@ -198,25 +197,8 @@ class CometServerApi
             }
             $user_id_array = implode(";",$user_id_array);
         }
-
-        if(!is_string($msg))
-        {
-            $msg = json_encode($msg);
-        }
-
-      $msg = base64_encode($msg)."";
-      return $this->send(self::$SEND_BY_USER_ID.";".$n.";".$user_id_array.";".$msg);
-   }
-
-   /**
-    * Отправка сообщения списку пользователей
-    * @param type $user_id_array
-    * @param type $event_name
-    * @param type $msg
-    */
-   public function send_to_user($user_id_array, $event_name, $msg)
-   {
-       return $this->send_by_user_id($user_id_array,Array("data"=>$msg,"event_name"=>$event_name) );
+   
+        return $this->send(self::$SEND_BY_USER_ID.";".$n.";".$user_id_array.";".base64_encode(json_encode($msg)));
    }
 
      /**
@@ -247,33 +229,14 @@ class CometServerApi
      * Отправляет произвольное сообщение серверу
      * @param int $event_id
      * @param string $msg
-     * @param bool $isCoding если true то сообщение перед отправкой будет закодировано в base64
      * @return array
      */
-   public function send_event($event,$msg, $isCoding = false)
+   public function send_to_pipe($pipe, $event_name, $msg)
    {
-      if($isCoding == false)
-      {
-      	  if(!is_string($msg))
-          {
-          	  $msg = json_encode($msg);
-          }
-          $msg = base64_encode($msg);
-      }
-
-      $n = 1;
-      if( is_array($event) )
-      {
-          $answer = Array();
-          foreach ($event as $key => $value)
-          {
-              $answer[] = $this->send(self::$SEND_EVENT.";".$value.";".$msg);
-          }
-
-          return $answer;
-      }
-
-      return $this->send(self::$SEND_EVENT.";".$event.";".$msg);
+      $msg = Array("data"=>$msg,"event_name"=>$event_name); 
+      $msg = base64_encode(json_encode($msg));
+  
+      return $this->send(self::$SEND_EVENT.";".$pipe.";".$msg);
    }
 
 }
