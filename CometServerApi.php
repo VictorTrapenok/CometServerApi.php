@@ -7,27 +7,9 @@
  *  Copyright 2013, Trapenok Victor. Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 */
 
-define('NO_ERROR', 0);
-define('ERROR_USER_OFLINE', -5);
-define('ERROR_USER_OFLINE_AND_OVERFLOW_QUEUE', -10);
-define('ERROR_USER_OFLINE_MORE_MAX_OFLINE_TIME', -11);
-
-define('ERROR_USER_CONECTION', -6);
-
-define('ERROR_UNDEFINED_EVENT', -7);
-define('ERROR_UNDEFINED_SERVER_EVENT', -1);
-
-
-/**
- * Обращение с номером больше чем размер индекса подключёных пользователей
- */
-define('ERROR_MORE_MAX_USER_ID', -8);
-
-/**
- * Обращение с номером больше чем максимальное количество подключёных пользователей
- */
-define('ERROR_MORE_MAX_CONECTIONS', -9);
-
+define('NO_ERROR', 0);  
+define('ERROR_UNDEFINED_EVENT', -7); 
+ 
 /**
  *  Comet Server PHP Библиотека
  *  Библиотека предоставляет простое API для работы с Comet-Server.ru
@@ -41,9 +23,9 @@ define('ERROR_MORE_MAX_CONECTIONS', -9);
 */
 class CometServerApi
 {
-   static $version=1.5;
+   static $version=1.4;
    static $major_version=1;
-   static $minor_version=5;
+   static $minor_version=4;
 
    protected $server = "comet-server.ru";
    protected $port = 808;
