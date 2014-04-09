@@ -76,9 +76,9 @@ class comet_response{
 */
 class CometServerApi
 {
-   static $version=1.4;
+   static $version=1.5;
    static $major_version=1;
-   static $minor_version=4;
+   static $minor_version=5;
 
    protected $server = "comet-server.ru";
    protected $port = 808;
@@ -102,7 +102,8 @@ class CometServerApi
    protected static $CLEAR_UNDELIVERED_MESSAGES = 10;
    protected static $COUNT_UNDELIVERED_MESSAGES = 11;
    protected static $SET_PIPE_SETTINGS = 12;
- 
+   
+   protected static $GET_STAT = 13;
    
    /**
     * Конструетор оставлен публичным на тот случай если вам реально понадобится использовать два соединения с комет сервером единовременно но с разными $dev_id и $dev_key
@@ -303,24 +304,27 @@ class CometServerApi
    
    /**
     * Извлекает то сообщение которое попало в очередь раньше других и удаляет его из очереди
+    * @return comet_response
     */
-   protected function pop_first_undelivered_messages($user_id)
+   public function pop_first_undelivered_messages($user_id)
    {
       return $this->pop_undelivered_messages($user_id, 1);
    }
    
    /**
     * Извлекает то сообщение которое попало в очередь позже других и удаляет его из очереди
+    * @return comet_response
     */
-   protected function pop_last_undelivered_messages($user_id)
+   public function pop_last_undelivered_messages($user_id)
    {
       return $this->pop_undelivered_messages($user_id, 2);
    }
    
    /**
     * Очищает очередь недоставленных сообщений для массива пользователей
+    * @return comet_response
     */
-   protected function clear_undelivered_messages($user_id_array)
+   public function clear_undelivered_messages($user_id_array)
    {
         if(!is_array($user_id_array))
         {
@@ -336,8 +340,9 @@ class CometServerApi
    
    /**
     * Получает количество недоставленных сообщения для массива пользователей
+    * @return comet_response
     */
-   protected function count_undelivered_messages($user_id_array)
+   public function count_undelivered_messages($user_id_array)
    {
         if(!is_array($user_id_array))
         {
@@ -351,5 +356,12 @@ class CometServerApi
       return $this->send(self::$COUNT_UNDELIVERED_MESSAGES.";".$n.";".$user_id_array.";"); 
    }
    
+   /**
+    * Возвращает статистику сервера на момент вызова
+    * @return comet_response
+    */
+   public function get_stat()
+   {
+      return $this->send(self::$GET_STAT.";");
+   }
 }
-
