@@ -29,6 +29,9 @@ class comet_response{
         return false;
     }
     
+    /**
+     * Содержит текстовое пояснение к ошибке если getError() != 0 
+     */
     public function getInfo()
     {
         if( isset($this->data['info']))
@@ -39,22 +42,14 @@ class comet_response{
         return false;
     }
     
-    public function getData($index = false)
+    /**
+     * Ответ на запрос сервера
+     * @return Object
+     */
+    public function getData()
     {
         if( isset($this->data['data']))
         {
-            if( $index !== false)
-            {
-                if( isset($this->data['data'][$index]) )
-                {
-                    return $this->data['data'][$index];
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            
             return $this->data['data'];
         }
 
@@ -104,6 +99,8 @@ class CometServerApi
    protected static $SET_PIPE_SETTINGS = 12;
    
    protected static $GET_STAT = 13;
+   protected static $COUNT_USERS_IN_PIPE = 14;
+   protected static $CLEAR_PIPE_LOG = 15;
    
    /**
     * Конструетор оставлен публичным на тот случай если вам реально понадобится использовать два соединения с комет сервером единовременно но с разными $dev_id и $dev_key
@@ -363,5 +360,20 @@ class CometServerApi
    public function get_stat()
    {
       return $this->send(self::$GET_STAT.";");
+   }
+    
+   public function count_users_in_pipe($pipe)
+   {
+      return $this->send(self::$COUNT_USERS_IN_PIPE.";".$pipe);
+   }
+   
+   /**
+    * Очищает лог в канале
+    * @param type $pipe
+    * @return type
+    */
+   public function clear_pipe_log($pipe)
+   {
+      return $this->send(self::$CLEAR_PIPE_LOG.";".$pipe);
    }
 }
