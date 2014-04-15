@@ -10,6 +10,7 @@
 define('NO_ERROR', 0);  
 define('ERROR_UNDEFINED_EVENT', -7); 
 define('ERROR_CONNECTION', -100); 
+define('AUTHORIZATION_ERROR', -12); 
  
 class comet_response{
     
@@ -71,9 +72,9 @@ class comet_response{
 */
 class CometServerApi
 {
-   static $version=1.5;
+   static $version=1.6;
    static $major_version=1;
-   static $minor_version=5;
+   static $minor_version=6;
 
    protected $server = "comet-server.ru";
    protected $port = 808;
@@ -111,8 +112,15 @@ class CometServerApi
     */
    public function __construct($dev_id = false, $dev_key = false)
    {
-       if($dev_id !== false) $this->dev_id = $dev_id;
-       if($dev_key !== false) $this->dev_key = $dev_key;
+       if($dev_id !== false)
+       {
+           $this->dev_id = $dev_id;
+       }
+       
+       if($dev_key !== false)
+       {
+           $this->dev_key = $dev_key;
+       }
    }
 
    /**
@@ -150,7 +158,7 @@ class CometServerApi
     * @param string $msg
     * @return comet_response
     */
-   private function send($msg, $isRetry = false)
+   private function send($msg)
    {
        if($this->dev_id === false || $this->dev_key === false)
        {
@@ -173,19 +181,20 @@ class CometServerApi
        {
            if(!$this->authorization)
            {
-               $msg = "A:::".$this->dev_id.";".self::$major_version.";".self::$minor_version.";".$this->dev_key.";".$msg."\t";
+               $msg = "A:::".$this->dev_id.";".self::$major_version.";".self::$minor_version.";".$this->dev_key.";".$msg;
                $this->authorization = true;
            }
+           
+           $msg = $msg."\t";
 
-	   // echo  $msg;
+	   //  echo  $msg;
            if( @fputs($this->handle, $msg, strlen($msg) ) === false)
            {
                $this->handle = false;
-               if($isRetry) return $this->send($msg, true);
            }
 
            $tmp = fgets($this->handle);
-           // echo  "[".$tmp."]\n" ;
+           //  echo  "[".$tmp."]\n" ;
            return new comet_response(json_decode($tmp,true));
        }
        
