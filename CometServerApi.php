@@ -78,7 +78,7 @@ class CometServerApi
 
    protected $server = "comet-server.ru";
    protected $port = 808;
-   protected $timeOut = 1;
+   protected $timeOut = 0;
 
    protected $authorization = false;
    protected $handle = false;
@@ -173,7 +173,7 @@ class CometServerApi
             }
             else
             {
-                $this->handle = @fsockopen($this->server, $this->port);
+                $this->handle = @fsockopen("d".$this->dev_id.".app.".$this->server, $this->port);
             }
        }
 
@@ -208,7 +208,7 @@ class CometServerApi
           $hash = session_id();
       }
 
-      return $this->send(self::$ADD_USER_HASH.";".$user_id.";".session_id()."");
+      return $this->send(self::$ADD_USER_HASH.";".$user_id.";".$hash."");
    }
 
    /**
