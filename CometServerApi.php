@@ -72,13 +72,13 @@ class comet_response{
 */
 class CometServerApi
 {
-   static $version=1.6;
+   static $version=1.8;
    static $major_version=1;
-   static $minor_version=6;
+   static $minor_version=8;
 
    protected $server = "comet-server.ru";
    protected $port = 808;
-   protected $timeOut = 0;
+   protected $timeOut = 1;
 
    protected $authorization = false;
    protected $handle = false;
@@ -102,6 +102,7 @@ class CometServerApi
    protected static $GET_STAT = 13;
    protected static $COUNT_USERS_IN_PIPE = 14;
    protected static $CLEAR_PIPE_LOG = 15;
+   protected static $GET_USERS_IN_PIPE = 18;
    
    /**
     * Конструетор оставлен публичным на тот случай если вам реально понадобится использовать два соединения с комет сервером единовременно но с разными $dev_id и $dev_key
@@ -173,7 +174,7 @@ class CometServerApi
             }
             else
             {
-                $this->handle = @fsockopen("d".$this->dev_id.".app.".$this->server, $this->port);
+                $this->handle = @fsockopen("d".$this->dev_id.".app.".$this->server, $this->port,$e1,$e2);
             }
        }
 
@@ -185,20 +186,17 @@ class CometServerApi
                $this->authorization = true;
            }
            
-           $msg = $msg."\t";
-
-	   //  echo  $msg;
+           $msg = $msg."\t"; 
            if( @fputs($this->handle, $msg, strlen($msg) ) === false)
            {
                $this->handle = false;
            }
 
-           $tmp = fgets($this->handle);
-           //  echo  "[".$tmp."]\n" ;
+           $tmp = fgets($this->handle); 
            return new comet_response(json_decode($tmp,true));
        }
        
-       return new comet_response(Array("info" => "Не удалось создать соединение.", "error" => ERROR_CONNECTION, "data" => ""));
+       return new comet_response(Array("info" => "Не удалось создать соединение. ".$e1.":".$e2, "error" => ERROR_CONNECTION, "data" => ""));
    }
 
    public function add_user_hash($user_id, $hash = false)
@@ -284,6 +282,7 @@ class CometServerApi
    }
 
    /**
+    * Функция в betta тестировании.
     * Устанавливает длину лога сообщений в канале.
     * @param string $pipe
     * @param int $log_len
@@ -378,11 +377,23 @@ class CometServerApi
    
    /**
     * Очищает лог в канале
-    * @param type $pipe
-    * @return type
+    * @param string $pipe Имя канала
+    * @return comet_response
     */
    public function clear_pipe_log($pipe)
    {
       return $this->send(self::$CLEAR_PIPE_LOG.";".$pipe);
+   }
+   
+   
+   /**
+    * Функция в betta тестировании.
+    * Возвращает список идентификаторов авторизованный пользователей подписавшихся на канал.
+    * @param string $pipe Имя канала
+    * @return comet_response
+    */
+   public function get_users_in_pipe($pipe)
+   {
+      return $this->send(self::$GET_USERS_IN_PIPE.";".$pipe);
    }
 }
